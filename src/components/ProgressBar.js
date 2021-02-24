@@ -26,6 +26,7 @@ export default class ProgressBar extends Container {
     this._badge = null;
 
     this._createBackground();
+    this._createBar();
     this._createBadge();
 
     this.set({ value });
@@ -48,20 +49,12 @@ export default class ProgressBar extends Container {
   }
 
   /**
-   * Initializes and returns the bar that displays the value of the progressbar parameters
+   * Returns the bar that displays the value of the progressbar parameters
    *
    * @readonly
    * @memberof ProgressBar
    */
   get bar() {
-    this._bar = new Graphics();
-    this._bar.beginFill(0x000000);
-    this._bar.drawRect(0, 0, this._width, 25);
-    this._bar.endFill();
-    this._bar.alpha = 0.1;
-    this._bar.x = -this._width / 2;
-    gsap.to(this._bar, { pixi: { width: this.background.width * this._value / this._max } });
-
     return this._bar;
   }
 
@@ -76,7 +69,6 @@ export default class ProgressBar extends Container {
     this._background.alpha = 0.1;
     this._background.x = -this._width / 2;
     this.addChild(this._background);
-    this.addChild(this.bar);
   }
 
   /**
@@ -89,5 +81,20 @@ export default class ProgressBar extends Container {
     text.anchor.set(0.5, 1);
     this._badge.addChild(text)
     this.addChild(this._badge);
+  }
+
+  /**
+   * @private
+   * Creates the element that visually displays the value of the rocket's parameters
+   */
+  _createBar() {
+    this._bar = new Graphics();
+    this._bar.beginFill(0x000000);
+    this._bar.drawRect(0, 0, this._width, 25);
+    this._bar.endFill();
+    this._bar.alpha = 0.1;
+    this._bar.x = -this._width / 2;
+    gsap.to(this._bar, { pixi: { width: this.background.width * this._value / this._max } });
+    this.addChild(this._bar);
   }
 }
