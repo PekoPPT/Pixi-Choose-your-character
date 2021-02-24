@@ -100,4 +100,13 @@ export default class Rocket extends Container {
     this._inner.addChild(this._fire);
   }
 
+  /**
+   * Removes the Fire container form the Rocket
+   *
+   * @memberof Rocket
+   */
+  extinguish() {
+    this._inner.removeChild(this._fire);
+  }
+
 }

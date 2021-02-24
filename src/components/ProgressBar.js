@@ -33,7 +33,7 @@ export default class ProgressBar extends Container {
 
   set({ value }) {
     this._value = value;
-    gsap.to(this._bar, { pixi: { scaleX: this._value / 100 } });
+    gsap.to(this._bar, { pixi: { width: this.background.width * this._value / this._max } });
 
     this._badge.getChildByName('value').text = `${this._label.toUpperCase()}: ${this._value}`;
   }
