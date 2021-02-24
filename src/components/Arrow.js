@@ -2,9 +2,10 @@ import { Sprite, Texture } from "pixi.js";
 import gsap from "gsap";
 
 export default class Arrow extends Sprite {
-  constructor() {
+  constructor(flipHorizontal) {
     super(Texture.from('arrow'));
 
+    this.angle = flipHorizontal;
     this.interactive = true;
     this.buttonMode = true;
     this.anchor.set(0.5);
@@ -19,7 +20,7 @@ export default class Arrow extends Sprite {
    * @private
    */
   _handleMouseDown() {
-    if(this._tween) this._tween.kill();
+    if (this._tween) this._tween.kill();
     this.scale.set(0.9);
   }
 
@@ -27,6 +28,6 @@ export default class Arrow extends Sprite {
    * @private
    */
   _handleMouseUp() {
-    this._tween = gsap.to(this.scale, { x: 1, y: 1, ease: "elastic.out(1, 0.4)", duration: 0.8});
+    this._tween = gsap.to(this.scale, { x: 1, y: 1, ease: "elastic.out(1, 0.4)", duration: 0.8 });
   }
 }

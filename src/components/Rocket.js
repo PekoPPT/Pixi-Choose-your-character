@@ -1,5 +1,6 @@
 import { Container, Sprite } from "pixi.js";
 import gsap from "gsap";
+import Fire from "./Fire";
 
 export default class Rocket extends Container {
   /**
@@ -8,8 +9,9 @@ export default class Rocket extends Container {
    * @param {Number} speed - The value which determines the speed of the rocket
    * @param {Number} acceleration - The value which determines the acceleration of the rocket
    * @param {Number} handling - The value which determines the handling of the rocket
+   * @param {Object} fireConfiguration - Configuration options for positioning of the Fire animation
    */
-  constructor({ name = 'rocket', textureName, speed, acceleration, handling }) {
+  constructor({ name = 'rocket', textureName, speed, acceleration, handling, fireConfiguration }) {
     super();
 
     this.name = name;
@@ -21,12 +23,13 @@ export default class Rocket extends Container {
     this._inner = new Container();
     this._inner.name = 'rocket-inner';
     this.addChild(this._inner);
-    
+
+    this.ignite(fireConfiguration);
     this._createBody(textureName);
   }
 
   async show() {
-    await gsap.fromTo(this._inner, { y: -150, alpha: 0}, { y: 0, alpha: 1, ease: 'elastic(1,0.5)', duration: 1.5 });
+    await gsap.fromTo(this._inner, { y: -150, alpha: 0 }, { y: 0, alpha: 1, ease: 'elastic(1,0.5)', duration: 1.5 });
     this.idle();
   }
 
@@ -65,6 +68,10 @@ export default class Rocket extends Container {
     return this._speed;
   }
 
+  get fire() {
+    return this._fire;
+  }
+
   /**
    * @private
    * @param {String} textureName
@@ -73,6 +80,24 @@ export default class Rocket extends Container {
     this._body = new Sprite.from(textureName);
     this._body.y = 41;
     this._body.anchor.set(0.5);
+
     this._inner.addChild(this._body);
   }
+
+  /**
+   * Initializes Fire object and position is according to the character that is loaded
+   *
+   * @param {*} configuration
+   * @memberof Rocket
+   */
+  ignite(configuration) {
+    this._fire = new Fire();
+    this._fire.angle = configuration.angle;
+    this._fire.x = configuration.x;
+    this._fire.y = configuration.y;
+    this._fire.scale.set(configuration.scale);
+
+    this._inner.addChild(this._fire);
+  }
+
 }

@@ -1,5 +1,8 @@
 import { Container, Graphics, Text } from "pixi.js";
 import gsap from "gsap";
+import PixiPlugin from "gsap/PixiPlugin";
+
+gsap.registerPlugin(PixiPlugin);
 
 export default class ProgressBar extends Container {
   /**
@@ -30,6 +33,8 @@ export default class ProgressBar extends Container {
 
   set({ value }) {
     this._value = value;
+    gsap.to(this._bar, { pixi: { scaleX: this._value / 100 } });
+
     this._badge.getChildByName('value').text = `${this._label.toUpperCase()}: ${this._value}`;
   }
 
@@ -43,6 +48,23 @@ export default class ProgressBar extends Container {
   }
 
   /**
+   * Initializes and returns the bar that displays the value of the progressbar parameters
+   *
+   * @readonly
+   * @memberof ProgressBar
+   */
+  get bar() {
+    this._bar = new Graphics();
+    this._bar.beginFill(0x000000);
+    this._bar.drawRect(0, 0, this._width, 25);
+    this._bar.endFill();
+    this._bar.alpha = 0.1;
+    this._bar.x = -this._width / 2;
+
+    return this._bar;
+  }
+
+  /**
    * @private
    */
   _createBackground() {
@@ -53,6 +75,7 @@ export default class ProgressBar extends Container {
     this._background.alpha = 0.1;
     this._background.x = -this._width / 2;
     this.addChild(this._background);
+    this.addChild(this.bar);
   }
 
   /**
