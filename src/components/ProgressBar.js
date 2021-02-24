@@ -60,6 +60,7 @@ export default class ProgressBar extends Container {
     this._bar.endFill();
     this._bar.alpha = 0.1;
     this._bar.x = -this._width / 2;
+    gsap.to(this._bar, { pixi: { width: this.background.width * this._value / this._max } });
 
     return this._bar;
   }
